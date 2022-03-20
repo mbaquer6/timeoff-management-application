@@ -30,7 +30,7 @@ module "ecs_release_pipeline" {
 }
 
 resource "aws_ecr_repository_policy" "default" {
-  repository = var.repo_name
+  repository = var.image_repo_name
 
   policy = <<EOF
 {
