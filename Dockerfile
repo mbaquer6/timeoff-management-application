@@ -14,7 +14,7 @@
 # 4. Login to running container (to update config (vi config/app.json): 
 #	docker exec -ti --user root alpine_timeoff /bin/sh
 # --------------------------------------------------------------------
-FROM alpine:3.15
+FROM 919549532909.dkr.ecr.us-east-1.amazonaws.com/alpine:3.15
 
 EXPOSE 3000
 
