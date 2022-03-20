@@ -18,7 +18,7 @@ resource "aws_ecr_repository_policy" "default" {
         "Sid": "AllowPushPull",
         "Effect": "Allow",
         "Principal": {
-          "AWS": ["arn:aws:iam::${var.account_id}:role/dev-time-off-build"]
+          "AWS": ["${var.account_id}"]
         },
         "Action": [
           "ecr:BatchCheckLayerAvailability",
