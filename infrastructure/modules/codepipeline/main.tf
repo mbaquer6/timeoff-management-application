@@ -28,3 +28,31 @@ module "ecs_release_pipeline" {
     }
   ]
 }
+
+resource "aws_ecr_repository_policy" "default" {
+  repository = var.repo_name
+
+  policy = <<EOF
+{
+    "Version": "2008-10-17",
+    "Statement": [
+      {
+        "Sid": "AllowPushPull",
+        "Effect": "Allow",
+        "Principal": {
+          "AWS": ["arn:aws:iam::${var.account_id}:role/dev-time-off-build"]
+        },
+        "Action": [
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:BatchGetImage",
+          "ecr:CompleteLayerUpload",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:InitiateLayerUpload",
+          "ecr:PutImage",
+          "ecr:UploadLayerPart"
+        ]
+      }
+    ]
+}
+EOF
+}
