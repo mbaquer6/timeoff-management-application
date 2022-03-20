@@ -26,4 +26,11 @@ module "ecs_release_pipeline" {
   github_webhook_events       = ["release"]
   webhook_filter_json_path    = "$.action"
   webhook_filter_match_equals = "published"
+  environment_variables = [
+    {
+      name: "CONTAINER_NAME"
+      value: "time-off"
+      type: "PLAINTEXT"
+    }
+  ]
 }
