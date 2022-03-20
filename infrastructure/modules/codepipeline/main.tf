@@ -24,8 +24,8 @@ module "ecs_release_pipeline" {
   region                      = var.region
   privileged_mode             = "true"
   github_webhook_events       = ["push"]
-  webhook_filter_json_path    = "$.action"
-  webhook_filter_match_equals = "published"
+  # webhook_filter_json_path    = "$.action"
+  # webhook_filter_match_equals = "published"
   environment_variables = [
     {
       name: "CONTAINER_NAME"
