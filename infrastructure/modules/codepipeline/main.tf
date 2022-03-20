@@ -23,7 +23,7 @@ module "ecs_release_pipeline" {
   ecs_cluster_name            = var.ecs_cluster_name
   region                      = var.region
   privileged_mode             = "true"
-  github_webhook_events       = ["release"]
+  github_webhook_events       = ["push"]
   webhook_filter_json_path    = "$.action"
   webhook_filter_match_equals = "published"
   environment_variables = [

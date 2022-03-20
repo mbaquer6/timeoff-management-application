@@ -7,9 +7,9 @@ terraform {
 }
 
 inputs = {
-  name = "time-off"
-
-  tags = {
+  name     = "time-off"
+  env_list = ["dev", "qa"]
+  tags     = {
     Environment = "non-prod"
   }
 }
