@@ -27,6 +27,14 @@ data "aws_subnet_ids" "public" {
   }
 }
 
+data "aws_subnet_ids" "private" {
+  vpc_id = var.vpc_id
+  filter {
+    name   = "tag:Name"
+    values = ["non-prod-private*"]
+  }
+}
+
 data "aws_route53_zone" "selected" {
   name = var.domain_name
 }
@@ -60,7 +68,7 @@ resource "aws_ecs_service" "default" {
 
   network_configuration {
     security_groups = [aws_security_group.container.id]
-    subnets         = data.aws_subnet_ids.public.ids
+    subnets         = data.aws_subnet_ids.private.ids
   }
 
   load_balancer {
