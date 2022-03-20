@@ -2,10 +2,50 @@
 # TimeOff.Management
 
 Web application for managing employee absences.
+## Application infrastructure
 
-<a href="https://travis-ci.org/timeoff-management/timeoff-management-application"><img align="right" src="https://travis-ci.org/timeoff-management/timeoff-management-application.svg?branch=master" alt="Build status" /></a>
+AWS Reference Architecture:
 
-## Features
+![Timeoff Management Application](docs/imgs/time_off_architecture.png)
+
+## Infrastructure provisioning prerequisites
+
+* Terraform >= v1.1.7
+* AWS CLI >= 2.1.38
+* Terragrunt >= 0.36.6
+* Create Access Token in Github with repo and hooks full access.
+* Set AWS ssm parameter with the Github access token:
+
+```console
+aws ssm put-parameter --name /github/oauth_token --value “token value” --type SecureString --overwrite
+```
+
+## Infrastructure components
+
+* ECR repository: hosts the time-off application docker image
+* Codepipeline: Automates the code build and deployment to ECS
+* ECS cluster and Fargate service: Runs the time-off application
+* VPC deployment: Creates the VPC infrastructure
+
+Terragrunt folder structure was designed to allow managing multiple AWS accounts and environments in an easy way
+and to avoid to repeat the same code for each account
+
+## Currently defined environemnts
+
+1. non_prod account
+* global: Common infrastructure for all environments (ECR)
+* dev: Development environment (VPC, ECS, CodePipeline)
+
+## Infrastructure deployment order
+
+1. VPC
+2. ECR Repository
+3. ECS cluster
+4. Fargate service
+5. Codepipeline
+
+
+## Application features
 
 **Multiple views of staff absences**
 
