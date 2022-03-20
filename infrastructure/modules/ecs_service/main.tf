@@ -52,11 +52,11 @@ data "aws_iam_policy_document" "ecs_tasks_execution_role" {
 
 resource "aws_iam_role" "ecs_tasks_execution_role" {
   name               = "${var.env}-ecs-task-execution-role"
-  assume_role_policy = "${data.aws_iam_policy_document.ecs_tasks_execution_role.json}"
+  assume_role_policy = data.aws_iam_policy_document.ecs_tasks_execution_role.json
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_tasks_execution_role" {
-  role       = "${aws_iam_role.ecs_tasks_execution_role.name}"
+  role       = aws_iam_role.ecs_tasks_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
@@ -88,7 +88,7 @@ resource "aws_ecs_service" "default" {
   desired_count                      = var.desired_count
   deployment_maximum_percent         = var.deployment_maximum_percent
   deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
-  
+
   tags = var.tags
 }
 
@@ -126,7 +126,7 @@ resource "aws_security_group" "container" {
   tags = var.tags
 }
 
-resource "aws_security_group_rule" "dynamicPorts" {
+resource "aws_security_group_rule" "dynamicPorts" { #rename this
   description              = "container_port_${local.app_name}"
   type                     = "ingress"
   from_port                = var.container_port
@@ -155,6 +155,16 @@ resource "aws_security_group" "listener" {
   }
 
   tags = var.tags
+}
+
+resource "aws_security_group_rule" "http_redirect" {
+  description       = "http_redirect_${local.app_name}"
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  security_group_id = aws_security_group.listener.id
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_cloudwatch_log_group" "default" {
@@ -199,7 +209,18 @@ module "alb" {
       tags = var.tags
     }
   ]
-
+  http_tcp_listeners = [
+    {
+      port        = 80
+      protocol    = "HTTP"
+      action_type = "redirect"
+      redirect = {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
+      }
+    },
+  ]
   https_listeners = [
     {
       port               = var.alb_listener_port
