@@ -34,10 +34,28 @@ variable "name" {
   default     = "app"
 }
 
+variable "namespace" {
+  description = "The namespace of the stack to deploy"
+  type        = string
+  default     = null
+}
+
 variable "repo_owner" {
   description = "The owner of the repo to deploy"
   type        = string
-  default     = "james-d-turner"
+  default     = ""
+}
+
+variable "repo_name" {
+  description = "The name of the repo to deploy"
+  type        = string
+  default     = ""
+}
+
+variable "image_repo_name" {
+  description = "The name of the image repo to deploy"
+  type        = string
+  default     = ""
 }
 
 variable "branch" {
