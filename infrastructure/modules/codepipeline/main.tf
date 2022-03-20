@@ -1,9 +1,5 @@
-# data "aws_ssm_parameter" "github_oauth_token" {
-#   name = "/github/oauth_token"
-# }
-
-data "aws_ssm_parameter" "github_webhooks_token" {
-  name = "/github/webhooks_token"
+data "aws_ssm_parameter" "github_oauth_token" {
+  name = "/github/oauth_token"
 }
 
 module "ecs_release_pipeline" {
@@ -13,8 +9,8 @@ module "ecs_release_pipeline" {
   name                        = var.name
   namespace                   = null
   stage                       = var.env
-  github_oauth_token          = "/github/webhooks_token"
-  github_webhooks_token       = data.aws_ssm_parameter.github_webhooks_token.value
+  github_oauth_token          = data.aws_ssm_parameter.github_oauth_token.value
+  github_webhooks_token       = data.aws_ssm_parameter.github_oauth_token.value
   repo_owner                  = var.repo_owner
   repo_name                   = var.repo_name
   branch                      = var.branch

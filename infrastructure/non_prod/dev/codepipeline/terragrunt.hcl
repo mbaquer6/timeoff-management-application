@@ -11,7 +11,6 @@ locals {
 
 inputs = {
   name                        = "time-off"
-  namespace                   = "eg"
   stage                       = local.env
   repo_owner                  = "mbaquer6"
   repo_name                   = "timeoff-management-application"
