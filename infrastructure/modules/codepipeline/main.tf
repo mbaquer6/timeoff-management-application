@@ -1,6 +1,6 @@
-data "aws_ssm_parameter" "github_oauth_token" {
-  name = "/github/oauth_token"
-}
+# data "aws_ssm_parameter" "github_oauth_token" {
+#   name = "/github/oauth_token"
+# }
 
 data "aws_ssm_parameter" "github_webhooks_token" {
   name = "/github/webhooks_token"
@@ -13,7 +13,7 @@ module "ecs_release_pipeline" {
   name                        = var.name
   namespace                   = null
   stage                       = var.env
-  github_oauth_token          = data.aws_ssm_parameter.github_oauth_token.value
+  github_oauth_token          = "/github/webhooks_token"
   github_webhooks_token       = data.aws_ssm_parameter.github_webhooks_token.value
   repo_owner                  = var.repo_owner
   repo_name                   = var.repo_name
@@ -24,8 +24,6 @@ module "ecs_release_pipeline" {
   region                      = var.region
   privileged_mode             = "true"
   github_webhook_events       = ["push"]
-  # webhook_filter_json_path    = "$.action"
-  # webhook_filter_match_equals = "published"
   environment_variables = [
     {
       name: "CONTAINER_NAME"
